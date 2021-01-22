@@ -1,15 +1,16 @@
 package guru.springframework.converters;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.domain.Ingredient;
 import guru.springframework.domain.Recipe;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.math.BigDecimal;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class IngredientCommandToIngredientTest {
 
@@ -21,7 +22,7 @@ public class IngredientCommandToIngredientTest {
 
     IngredientCommandToIngredient converter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         converter = new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure());
     }
@@ -67,7 +68,6 @@ public class IngredientCommandToIngredientTest {
         command.setAmount(AMOUNT);
         command.setDescription(DESCRIPTION);
         UnitOfMeasureCommand unitOfMeasureCommand = new UnitOfMeasureCommand();
-
 
         //when
         Ingredient ingredient = converter.convert(command);

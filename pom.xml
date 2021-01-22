@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.4.2</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+  <groupId>com.jmoe</groupId>
+  <artifactId>recipes-mognodb</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>recipes-mongodb</name>
+  <description>Recipes Reactive MongoDB project</description>
+
+  <properties>
+    <java.version>11</java.version>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>de.flapdoodle.embed</groupId>
+      <artifactId>de.flapdoodle.embed.mongo</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>junit-vintage-engine</artifactId>
+          <groupId>org.junit.vintage</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.6</version>
+        <executions>
+          <!--
+              Prepara el agente de tiempo de ejecución de JaCoCo, el cual
+              se pasa como agumento a la VM cuando Maven ejecuta el plugin Surefire plugin.
+          -->
+          <execution>
+            <id>pre-unit-test</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <!-- Establece la ruta al fichero que contiene los datos de ejecución. -->
+              <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
+              <!--
+                  Establece el nombre de la propiedad que contiene las configurationes
+                  para el agente de tiempo de ejecución de JaCoCo.
+              -->
+              <propertyName>surefireArgLine</propertyName>
+            </configuration>
+          </execution>
+          <!--
+              Crea el informe de cobertura para los tests unitarios después que
+              los tests unitarios se hayan ejecutado.
+          -->
+          <execution>
+            <id>post-unit-test</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <!-- Establece la ruta del fichero que contiene los datos de ejecución. -->
+              <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+              <!-- Establece el directorio de destino donde se almacenarán los informes de cobertura. -->
+              <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+            </configuration>
+          </execution>
+          <!-- Estas ejecuciones requieren que los tests unitarios se omitan. -->
+          <!--
+              Prepara el agente de tiempo de ejecución de JaCoCo, el cual
+              se pasa como agumento a la VM cuando Maven ejecuta el plugin Failsafe plugin.
+          -->
+          <execution>
+            <id>pre-integration-test</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            <configuration>
+              <!-- Establece la ruta del fichero que contiene los datos de ejecución. -->
+              <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
+              <!--
+                  Establece el nombre de la propiedad que contiene la configuración
+                  para el agente en tiempo de ejecución de JaCoCo.
+              -->
+              <propertyName>failsafeArgLine</propertyName>
+            </configuration>
+          </execution>
+          <!--
+              Crea el informe de cobertura para los tests de integración después que
+              los tests de integración se hayan ejecutado.
+          -->
+          <execution>
+            <id>post-integration-test</id>
+            <phase>post-integration-test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <!-- Establece la ruta del fichero que contiene los datos de ejecución. -->
+              <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
+              <!-- Establece el directorio de destino donde se almacenarán los informes de cobertura. -->
+              <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+          <!-- Establece la Sets the VM argument line used when unit tests are run. -->
+          <argLine>${surefireArgLine}</argLine>
+          <!-- Excluye los tests de integración cuando se ejecutan los tests unitarios. -->
+          <excludes>
+            <exclude>**/IT*.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.0.0-M4</version>
+        <configuration>
+          <!-- Establece el valor de la línea de argumentos de la VM utilizado cuando se ejecutan los tests de integración. -->
+          <argLine>${failsafeArgLine}</argLine>
+          <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+          <includes>
+            <include>**/*IT.java</include>
+            <parallel>none</parallel>
+          </includes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <goals>install</goals>
+        </configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <scm>
+    <developerConnection>scm:git:https://github.com/juanma512/recipes-mongodb.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+</project>

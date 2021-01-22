@@ -1,23 +1,32 @@
 package guru.springframework.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.services.ImageService;
 import guru.springframework.services.RecipeService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+@ExtendWith(MockitoExtension.class)
 public class ImageControllerTest {
 
     @Mock
@@ -26,18 +35,16 @@ public class ImageControllerTest {
     @Mock
     RecipeService recipeService;
 
+    @InjectMocks
     ImageController controller;
 
     MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-
-        controller = new ImageController(imageService, recipeService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setControllerAdvice(new ControllerExceptionHandler())
-                .build();
+            .setControllerAdvice(new ControllerExceptionHandler())
+            .build();
     }
 
     @Test
@@ -50,8 +57,8 @@ public class ImageControllerTest {
 
         //when
         mockMvc.perform(get("/recipe/1/image"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("recipe"));
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("recipe"));
 
         verify(recipeService, times(1)).findCommandById(anyString());
 
@@ -60,12 +67,12 @@ public class ImageControllerTest {
     @Test
     public void handleImagePost() throws Exception {
         MockMultipartFile multipartFile =
-                new MockMultipartFile("imagefile", "testing.txt", "text/plain",
-                        "Spring Framework Guru".getBytes());
+            new MockMultipartFile("imagefile", "testing.txt", "text/plain",
+                "Spring Framework Guru".getBytes());
 
         mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/recipe/1/show"));
+            .andExpect(status().is3xxRedirection())
+            .andExpect(header().string("Location", "/recipe/1/show"));
 
         verify(imageService, times(1)).saveImageFile(anyString(), any());
     }
@@ -83,7 +90,7 @@ public class ImageControllerTest {
 
         int i = 0;
 
-        for (byte primByte : s.getBytes()){
+        for (byte primByte : s.getBytes()) {
             bytesBoxed[i++] = primByte;
         }
 
@@ -93,8 +100,8 @@ public class ImageControllerTest {
 
         //when
         MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage"))
-                .andExpect(status().isOk())
-                .andReturn().getResponse();
+            .andExpect(status().isOk())
+            .andReturn().getResponse();
 
         byte[] reponseBytes = response.getContentAsByteArray();
 

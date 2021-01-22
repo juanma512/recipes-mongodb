@@ -1,17 +1,20 @@
 package guru.springframework.converters;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import guru.springframework.commands.CategoryCommand;
 import guru.springframework.commands.IngredientCommand;
 import guru.springframework.commands.NotesCommand;
 import guru.springframework.commands.RecipeCommand;
 import guru.springframework.domain.Difficulty;
 import guru.springframework.domain.Recipe;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RecipeCommandToRecipeTest {
+
     public static final String RECIPE_ID = "1";
     public static final Integer COOK_TIME = Integer.valueOf("5");
     public static final Integer PREP_TIME = Integer.valueOf("7");
@@ -29,12 +32,11 @@ public class RecipeCommandToRecipeTest {
 
     RecipeCommandToRecipe converter;
 
-
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         converter = new RecipeCommandToRecipe(new CategoryCommandToCategory(),
-                new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
-                new NotesCommandToNotes());
+            new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
+            new NotesCommandToNotes());
     }
 
     @Test
@@ -85,7 +87,7 @@ public class RecipeCommandToRecipeTest {
         recipeCommand.getIngredients().add(ingredient2);
 
         //when
-        Recipe recipe  = converter.convert(recipeCommand);
+        Recipe recipe = converter.convert(recipeCommand);
 
         assertNotNull(recipe);
         assertEquals(RECIPE_ID, recipe.getId());

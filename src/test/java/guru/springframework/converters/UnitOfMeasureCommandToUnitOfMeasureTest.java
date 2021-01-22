@@ -1,11 +1,13 @@
 package guru.springframework.converters;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.domain.UnitOfMeasure;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class UnitOfMeasureCommandToUnitOfMeasureTest {
 
@@ -14,7 +16,7 @@ public class UnitOfMeasureCommandToUnitOfMeasureTest {
 
     UnitOfMeasureCommandToUnitOfMeasure converter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         converter = new UnitOfMeasureCommandToUnitOfMeasure();
 

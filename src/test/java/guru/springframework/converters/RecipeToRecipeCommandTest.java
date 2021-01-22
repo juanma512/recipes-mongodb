@@ -1,11 +1,17 @@
 package guru.springframework.converters;
 
-import guru.springframework.commands.RecipeCommand;
-import guru.springframework.domain.*;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import static org.junit.Assert.*;
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.domain.Category;
+import guru.springframework.domain.Difficulty;
+import guru.springframework.domain.Ingredient;
+import guru.springframework.domain.Notes;
+import guru.springframework.domain.Recipe;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RecipeToRecipeCommandTest {
 
@@ -25,12 +31,12 @@ public class RecipeToRecipeCommandTest {
     public static final String NOTES_ID = "9";
     RecipeToRecipeCommand converter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         converter = new RecipeToRecipeCommand(
-                new CategoryToCategoryCommand(),
-                new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
-                new NotesToNotesCommand());
+            new CategoryToCategoryCommand(),
+            new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
+            new NotesToNotesCommand());
     }
 
     @Test

@@ -1,11 +1,13 @@
 package guru.springframework.converters;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import guru.springframework.commands.CategoryCommand;
 import guru.springframework.domain.Category;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Created by jt on 6/21/17.
@@ -16,7 +18,7 @@ public class CategoryToCategoryCommandTest {
     public static final String DESCRIPTION = "descript";
     CategoryToCategoryCommand convter;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         convter = new CategoryToCategoryCommand();
     }
